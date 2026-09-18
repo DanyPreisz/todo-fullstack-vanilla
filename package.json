@@ -1,0 +1,14 @@
+{
+  "name": "todo-fullstack-vanilla",
+  "version": "1.0.0",
+  "description": "To-Do List persistente fullstack con JavaScript vanilla y Node nativo (sin Express)",
+  "type": "module",
+  "main": "server/index.js",
+  "scripts": {
+    "start": "node server/index.js",
+    "dev": "node --watch server/index.js"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}
