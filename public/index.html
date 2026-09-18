@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Tareas — To-Do persistente</title>
+    <link rel="stylesheet" href="/css/style.css" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400;0,9..40,500;0,9..40,700;1,9..40,400&family=Fraunces:opsz,wght@9..144,600&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div class="bg-orb bg-orb-1"></div>
+    <div class="bg-orb bg-orb-2"></div>
+    <main class="shell">
+      <header class="topbar">
+        <div>
+          <p class="eyebrow">Fullstack · Vanilla JS</p>
+          <h1>Tareas</h1>
+        </div>
+        <div id="user-chip" class="user-chip hidden">
+          <span id="user-name"></span>
+          <button id="logout-btn" type="button" class="ghost">Salir</button>
+        </div>
+      </header>
+      <section id="auth-view" class="card auth-card">
+        <div class="tabs">
+          <button type="button" class="tab active" data-mode="login">Entrar</button>
+          <button type="button" class="tab" data-mode="register">Crear cuenta</button>
+        </div>
+        <form id="auth-form">
+          <label>
+            Usuario
+            <input name="username" autocomplete="username" maxlength="20" required />
+          </label>
+          <label>
+            Contraseña
+            <input name="password" type="password" autocomplete="current-password" required />
+          </label>
+          <p class="hint" id="auth-hint">3–20 caracteres en el usuario. Mínimo 6 en la contraseña.</p>
+          <p id="auth-error" class="error" hidden></p>
+          <button type="submit" id="auth-submit">Entrar</button>
+        </form>
+      </section>
+      <section id="app-view" class="hidden">
+        <form id="todo-form" class="card composer">
+          <input id="todo-input" name="title" placeholder="¿Qué hay que hacer?" maxlength="200" autocomplete="off" />
+          <button type="submit">Agregar</button>
+        </form>
+        <div class="toolbar">
+          <input id="search" type="search" placeholder="Buscar…" />
+          <div class="filters" role="tablist">
+            <button type="button" class="filter active" data-filter="all">Todas</button>
+            <button type="button" class="filter" data-filter="active">Pendientes</button>
+            <button type="button" class="filter" data-filter="completed">Hechas</button>
+          </div>
+        </div>
+        <ul id="todo-list" class="todo-list"></ul>
+        <footer class="status-bar">
+          <span id="counts">0 pendientes</span>
+          <button type="button" id="clear-completed" class="link">Borrar hechas</button>
+        </footer>
+      </section>
+    </main>
+    <script type="module" src="/js/app.js"></script>
+  </body>
+</html>
