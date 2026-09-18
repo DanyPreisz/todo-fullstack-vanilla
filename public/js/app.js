@@ -32,8 +32,8 @@ function setAuthMode(next) {
   authSubmit.textContent = mode === "login" ? "Entrar" : "Crear cuenta";
   authHint.textContent =
     mode === "register"
-      ? "Usuario 3–20 chars (letras, números, _). Contraseña mínimo 6."
-      : "Entrá con tu usuario para ver solo tus tareas.";
+      ? "Usuario 3-20 chars (letras, numeros, _). Contrasena minimo 6."
+      : "Entra con tu usuario para ver solo tus tareas.";
 }
 
 function renderAuth() {
@@ -52,23 +52,35 @@ function renderApp(user) {
 function todoItem(todo) {
   const li = document.createElement("li");
   li.className = `todo${todo.completed ? " done" : ""}`;
-  li.dataset.id = todo.id;
-  li.innerHTML = `
-    <button class="check" type="button" aria-label="Completar"></button>
-    <div class="title-wrap">
-      <input class="title" value="${escapeAttr(todo.title)}" />
-      <div class="meta">${formatDate(todo.createdAt)}</div>
-    </div>
-    <button class="icon-btn" type="button" data-action="delete" aria-label="Borrar">×</button>
-  `;
-  return li;
-}
+  li.dataset.id = String(todo.id);
 
-function escapeAttr(value) {
-  return String(value)
-    .replaceAll("&", "&")
-    .replaceAll('"', """)
-    .replaceAll("<", "<");
+  const check = document.createElement("button");
+  check.className = "check";
+  check.type = "button";
+  check.setAttribute("aria-label", "Completar");
+
+  const wrap = document.createElement("div");
+  wrap.className = "title-wrap";
+
+  const title = document.createElement("input");
+  title.className = "title";
+  title.value = todo.title;
+
+  const meta = document.createElement("div");
+  meta.className = "meta";
+  meta.textContent = formatDate(todo.createdAt);
+
+  wrap.append(title, meta);
+
+  const del = document.createElement("button");
+  del.className = "icon-btn";
+  del.type = "button";
+  del.dataset.action = "delete";
+  del.setAttribute("aria-label", "Borrar");
+  del.textContent = "x";
+
+  li.append(check, wrap, del);
+  return li;
 }
 
 function formatDate(iso) {
@@ -87,7 +99,7 @@ async function loadTodos() {
   if (!data.todos.length) {
     const empty = document.createElement("li");
     empty.className = "empty";
-    empty.textContent = search ? "Nada coincide con la búsqueda." : "No hay tareas en este filtro.";
+    empty.textContent = search ? "Nada coincide con la busqueda." : "No hay tareas en este filtro.";
     todoList.append(empty);
   } else {
     data.todos.forEach((todo) => todoList.append(todoItem(todo)));
