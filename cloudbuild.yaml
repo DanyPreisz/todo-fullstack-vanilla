@@ -1,0 +1,48 @@
+# Deploy automático cuando hay push al repo (Cloud Build + Cloud Run).
+substitutions:
+  _SERVICE: todo-vanilla
+  _REGION: southamerica-east1
+  _BUCKET: REPLACE_ME-todo-data
+
+steps:
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - build
+      - -t
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/${_SERVICE}:${COMMIT_SHA}
+      - .
+
+  - name: gcr.io/cloud-builders/docker
+    args:
+      - push
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/${_SERVICE}:${COMMIT_SHA}
+
+  - name: gcr.io/google.com/cloudsdktool/cloud-sdk
+    entrypoint: gcloud
+    args:
+      - run
+      - deploy
+      - ${_SERVICE}
+      - --image
+      - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/${_SERVICE}:${COMMIT_SHA}
+      - --region
+      - ${_REGION}
+      - --allow-unauthenticated
+      - --memory
+      - 512Mi
+      - --cpu
+      - "1"
+      - --max-instances
+      - "1"
+      - --set-env-vars
+      - DATA_DIR=/data,SQLITE_JOURNAL=DELETE
+      - --add-volume
+      - name=data,type=cloud-storage,bucket=${_BUCKET}
+      - --add-volume-mount
+      - volume=data,mount-path=/data
+
+images:
+  - ${_REGION}-docker.pkg.dev/${PROJECT_ID}/cloud-run-source-deploy/${_SERVICE}:${COMMIT_SHA}
+
+options:
+  logging: CLOUD_LOGGING_ONLY
